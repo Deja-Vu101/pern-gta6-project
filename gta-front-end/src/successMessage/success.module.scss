@@ -1,0 +1,41 @@
+@import "./../index.scss";
+
+.Success_Message {
+  @apply p-3 absolute left-10 top-10 rounded-lg bg-black bg-opacity-40 border-2 border-[var(--border-color)] p-5 text-center;
+
+  h2 {
+    @apply text-green-400 text-2xl font-medium uppercase;
+  }
+  p {
+    @apply py-3;
+
+    span {
+      @apply text-[#d67b9f] text-lg;
+    }
+  }
+  button {
+    @apply bg-[#D67B9F] text-base;
+  }
+  animation: var(--fade-animation) 1s ease-in-out forwards;
+}
+//.Success_Message {
+//  @apply p-3 absolute left-10 top-10;
+//  background-color: rgba(0, 0, 0, 0.8); /* Чорний колір з прозорістю для тла */
+//  border: 2px solid #D67B9F; /* Рожева рамка */
+//  border-radius: 8px; /* Закруглені кути */
+//  padding: 20px; /* Відступи всередині блоку */
+
+//  h2 {
+//    @apply text-green-400 text-3xl font-medium mb-4; /* Зелений колір, великий розмір шрифту, жирний */
+//  }
+
+//  p {
+//    @apply text-white text-lg mb-6; /* Білий колір тексту */
+//  }
+
+//  button {
+//    @apply bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors; /* Червона кнопка з білим текстом, закруглені кути */
+//  }
+
+//  animation: var(--fade-animation) 1s ease-in-out forwards; /* Анімація зміни прозорості */
+//}

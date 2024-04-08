@@ -1,0 +1,29 @@
+@import "./../index.scss";
+.wrapper {
+  @apply w-full min-h-full relative;
+  form {
+    @apply p-3 absolute left-10 top-10;
+    animation: var(--slide-in-animation) 2s ease-in-out forwards;
+  }
+  h1 {
+    @apply text-2xl mb-4;
+  }
+
+  button {
+    @apply text-lg font-medium uppercase py-1 px-4 border border-white mt-2 bg-transparent;
+
+    transition: box-shadow 0.4s linear, background-color 0.4s linear;
+
+    &:hover {
+      @apply shadow shadow-white bg-white/20;
+    }
+    &:disabled {
+      @apply cursor-not-allowed;
+    }
+  }
+
+  //.success {
+  //  @apply text-green-400 text-3xl font-medium;
+  //  animation: fade 0.4s;
+  //}
+}
