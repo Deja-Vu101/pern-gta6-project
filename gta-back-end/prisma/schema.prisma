@@ -21,3 +21,23 @@ model WaitList {
 
   @@map("wait_list")
 }
+
+model User {
+  id             String  @id @default(uuid())
+  email          String  @unique
+  password       String 
+  isActivated    Boolean @default(false)
+  activationLink String
+  Token          Token[]
+
+  @@map("users")
+}
+
+model Token {
+  id           Int    @id @default(autoincrement())
+  user         User   @relation(fields: [userId], references: [id])
+  userId       String
+  refreshToken String
+
+  @@map("token")
+}
