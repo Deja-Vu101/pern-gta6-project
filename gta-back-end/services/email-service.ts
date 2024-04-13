@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import nodemailer, { Transporter } from "nodemailer";
+import { ApiError } from "../exceptions/api-error";
 
 const prisma = new PrismaClient();
 class EmailService {
@@ -37,7 +38,7 @@ class EmailService {
     });
 
     if (!userActivationLink)
-      throw new Error("User is missing from this activation link");
+      throw ApiError.BadRequest("User is missing from this activation link");
 
     await prisma.user.update({
       where: {

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import tokenService from "./token-service";
 import UserDto from "../dto/user-dto";
 import emailService from "./email-service";
+import { ApiError } from "../exceptions/api-error";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,9 @@ class UserService {
     const newUser = await prisma.user.findFirst({
       where: { email: email },
     });
-    if (newUser) throw new Error("User with this email exists");
+    if (newUser) {
+      throw ApiError.BadRequest("User with this email exists");
+    }
 
     const hashPassword = await bcrypt.hash(password, 10);
     const activationLink = uuidv4();
@@ -25,10 +28,10 @@ class UserService {
       },
     });
 
-    await emailService.sendLetter(
-      email,
-      `${process.env.API_URL}activate/${activationLink}`
-    );
+    //await emailService.sendLetter(
+    //  email,
+    //  `${process.env.API_URL}activate/${activationLink}`
+    //);
 
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
@@ -47,11 +50,12 @@ class UserService {
       },
     });
 
-    if (!existUser) throw new Error("This user is not registered");
+    if (!existUser) throw ApiError.BadRequest("This user is not registered");
 
     const isPasswordMatch = await bcrypt.compare(password, existUser.password);
 
-    if (!isPasswordMatch) throw new Error("Your password is incorrect");
+    if (!isPasswordMatch)
+      throw ApiError.BadRequest("Your password is incorrect");
 
     const userDto = new UserDto(existUser);
     const tokens = tokenService.generateTokens({ ...userDto });
@@ -61,6 +65,12 @@ class UserService {
       user: userDto,
       ...tokens,
     };
+  }
+
+  async logout(refreshToken: string) {
+    const token = await tokenService.deleteToken(refreshToken);
+
+    return token;
   }
 }
 export default new UserService();

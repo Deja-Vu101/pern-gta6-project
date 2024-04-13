@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import { ApiError } from "../exceptions/api-error";
 
 const prisma = new PrismaClient();
 
@@ -47,6 +48,16 @@ class TokenService {
 
       return newToken;
     }
+  }
+
+  async deleteToken(refreshToken: string) {
+    const deletedToken = await prisma.token.deleteMany({
+      where: {
+        refreshToken: refreshToken,
+      },
+    });
+
+    return deletedToken;
   }
 }
 
