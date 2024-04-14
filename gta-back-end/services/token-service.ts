@@ -1,14 +1,15 @@
 import { PrismaClient } from "@prisma/client";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { ApiError } from "../exceptions/api-error";
+import { IValidateToken } from "../interfaces";
 
 const prisma = new PrismaClient();
 
+const accessTokenSecret = process.env.JWT_ACCESS_SECRET;
+const refreshTokenSecret = process.env.JWT_REFRESH_SECRET;
+
 class TokenService {
   generateTokens(payload: string | object) {
-    const accessTokenSecret = process.env.JWT_ACCESS_SECRET;
-    const refreshTokenSecret = process.env.JWT_ACCESS_SECRET;
-
     if (!accessTokenSecret || !refreshTokenSecret) {
       throw new Error("JWT_SECRET environment variable is not set.");
     }
@@ -20,6 +21,48 @@ class TokenService {
     });
 
     return { accessToken, refreshToken };
+  }
+
+  validateAccessToken(token: string) {
+    try {
+      if (accessTokenSecret) {
+        const decodedToken = jwt.verify(token, accessTokenSecret) as JwtPayload;
+
+        const userData: IValidateToken = {
+          email: decodedToken.email,
+          id: decodedToken.id,
+          isActivated: decodedToken.isActivated,
+          iat: decodedToken.iat as number,
+          exp: decodedToken.exp as number,
+        };
+        return userData;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async validateRefreshToken(token: string): Promise<IValidateToken | null> {
+    try {
+      if (!refreshTokenSecret) {
+        console.error("JWT_REFRESH_SECRET is not defined");
+        throw ApiError.Unauthorized();
+      }
+
+      const decodedToken = jwt.verify(token, refreshTokenSecret) as JwtPayload;
+
+      const userData: IValidateToken = {
+        email: decodedToken.email,
+        id: decodedToken.id,
+        isActivated: decodedToken.isActivated,
+        iat: decodedToken.iat as number,
+        exp: decodedToken.exp as number,
+      };
+
+      return userData;
+    } catch (error) {
+      return null;
+    }
   }
 
   async saveToken(userId: string, refreshToken: string) {
@@ -58,6 +101,15 @@ class TokenService {
     });
 
     return deletedToken;
+  }
+  async findToken(refreshToken: string) {
+    const foundToken = await prisma.token.findFirst({
+      where: {
+        refreshToken: refreshToken,
+      },
+    });
+
+    return foundToken;
   }
 }
 

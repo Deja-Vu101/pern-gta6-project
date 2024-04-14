@@ -16,8 +16,6 @@ class WaitList {
         },
       });
 
-      console.log(createRow);
-
       const newRow = await prisma.waitList.findUnique({
         where: { id: createRow.id },
       });
@@ -32,12 +30,13 @@ class WaitList {
     }
   }
 
-  async fetchWaitList(req: Request, res: Response) {
+  async fetchWaitList(req: Request, res: Response, next: NextFunction) {
     try {
       const waitlist = await prisma.waitList.findMany();
+
       res.json(waitlist);
     } catch (error) {
-      res.status(400).send({ message: error });
+      next(error);
     }
   }
 

@@ -2,11 +2,12 @@ import { Router } from "express";
 import waitlistController from "../controllers/waitlist-controller";
 import userController from "../controllers/user-controller";
 import { body } from "express-validator";
+import authMiddleware from "../middlewares/auth-middleware";
 
 const router = Router();
 
 router.post("/", waitlistController.addWaitItem);
-router.get("/waitlist", waitlistController.fetchWaitList);
+router.get("/waitlist", authMiddleware, waitlistController.fetchWaitList);
 router.get("/waitlist/:searchTerm", waitlistController.searchWaitItem);
 
 router.post(
@@ -24,5 +25,6 @@ router.post(
 router.post("/logout", userController.logout);
 
 router.get("/activate/:link", userController.activateEmail);
+router.get("/refresh", userController.refresh);
 
 export default router;
