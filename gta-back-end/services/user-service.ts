@@ -5,6 +5,7 @@ import tokenService from "./token-service";
 import UserDto from "../dto/user-dto";
 import emailService from "./email-service";
 import { ApiError } from "../exceptions/api-error";
+import userController from "../controllers/user-controller";
 
 const prisma = new PrismaClient();
 
@@ -71,6 +72,34 @@ class UserService {
     const token = await tokenService.deleteToken(refreshToken);
 
     return token;
+  }
+
+  async refresh(refreshToken: string) {
+    if (!refreshToken) throw ApiError.Unauthorized();
+
+    const userData = await tokenService.validateRefreshToken(refreshToken);
+    const dbToken = await tokenService.findToken(refreshToken);
+
+    if (!userData || !dbToken) {
+      throw ApiError.Unauthorized();
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userData.id,
+      },
+    });
+
+    if (user) {
+      const userDto = new UserDto(user);
+      const tokens = tokenService.generateTokens({ ...userDto });
+      await tokenService.saveToken(userDto.id, tokens.refreshToken);
+
+      return {
+        user: userDto,
+        ...tokens,
+      };
+    }
   }
 }
 export default new UserService();
