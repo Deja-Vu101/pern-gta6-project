@@ -1,13 +1,28 @@
-import axios from "axios";
-import { IWaitListAddItem, IWaitListItem } from "../app.interfaces";
+import axios, { AxiosError } from "axios";
+import {
+  IApiResponse,
+  IWaitListAddItem,
+  IWaitListItem,
+} from "../app.interfaces";
+import { $api } from "../http";
 
 const URL = "http://localhost:5000/api";
 
 class WaitlistService {
   async fetchWaitList() {
-    const res = await axios.get(`${URL}/waitlist`);
+    try {
+      const res = await $api.get(`${URL}/waitlist`);
 
-    return res.data;
+      return res.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<
+        IApiResponse<{ message: string; arrays: any[] }>
+      >;
+
+      if (axiosError.response?.status === 401) {
+        window.location.href = "/login";
+      }
+    }
   }
 
   async addToListWaitItem(data: IWaitListAddItem): Promise<IWaitListItem> {

@@ -74,3 +74,16 @@ body {
     @apply border-[#E88F9E];
   }
 }
+
+.Button {
+  @apply text-lg font-medium uppercase py-1 px-4 border border-white mt-2 bg-transparent;
+
+  transition: box-shadow 0.4s linear, background-color 0.4s linear;
+
+  &:hover {
+    @apply shadow shadow-white bg-white/20;
+  }
+  &:disabled {
+    @apply cursor-not-allowed;
+  }
+}

@@ -8,7 +8,11 @@ const router = Router();
 
 router.post("/", waitlistController.addWaitItem);
 router.get("/waitlist", authMiddleware, waitlistController.fetchWaitList);
-router.get("/waitlist/:searchTerm", waitlistController.searchWaitItem);
+router.get(
+  "/waitlist/:searchTerm",
+  authMiddleware,
+  waitlistController.searchWaitItem
+);
 
 router.post(
   "/registration",

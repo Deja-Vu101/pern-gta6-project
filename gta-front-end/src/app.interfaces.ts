@@ -20,3 +20,21 @@ export interface IUseSearchWaitItems {
   setSearchErrorMessage: (text: string) => void;
   onSuccess: (searchedItems: IWaitListItem[]) => void;
 }
+
+export interface IUser {
+  email: string;
+  isActivated: boolean;
+  id: string;
+}
+
+export interface IAuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: IUser;
+}
+
+export interface IAuthForm {
+  email: string;
+  password: string;
+  repeated?: string;
+}

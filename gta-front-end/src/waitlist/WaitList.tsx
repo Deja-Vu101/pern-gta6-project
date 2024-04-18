@@ -5,6 +5,7 @@ import { useDebounce } from "../hooks";
 import ErrorOutput from "../error/ErrorOutput";
 import { Triangle } from "react-loader-spinner";
 import { useSearchWaitItems, useWaitlist } from "../hooks/useWaitlist";
+import { ProfileButton } from "../profile/ProfileButton";
 
 const WaitList = () => {
   const [searchedWaitItems, setSearchedWaitItems] = useState<IWaitListItem[]>(
@@ -18,7 +19,7 @@ const WaitList = () => {
     setSearchErrorMessage: setSearchErrorMessage,
   });
 
-  const { data } = useWaitlist();
+  const { data, error } = useWaitlist();
 
   const debounce = useDebounce(inputValue, 1000);
 
@@ -34,7 +35,10 @@ const WaitList = () => {
 
   return (
     <main className={style.Waitlist}>
-      <h1>WaitList</h1>
+      <div className={style.table_name}>
+        <h1>WaitList</h1>
+      </div>
+
       <input
         type="text"
         className="Input"
@@ -54,6 +58,7 @@ const WaitList = () => {
           <table>
             <thead className={style.stickyHeader}>
               <tr>
+                <th></th>
                 <th>Email</th>
                 <th>Name</th>
                 <th className={style.queue_cell}>Queue</th>
@@ -63,6 +68,7 @@ const WaitList = () => {
               {!searchErrorMessage &&
                 dataForTable.map((item: IWaitListItem) => (
                   <tr key={item.id}>
+                    <td>1</td>
                     <td>{item.email}</td>
                     <td>{item.name}</td>
                     <td className={style.queue_cell}>{item.queue}</td>
@@ -87,6 +93,8 @@ const WaitList = () => {
           errorMessage={searchErrorMessage}
         />
       </div>
+
+      <ProfileButton />
     </main>
   );
 };
