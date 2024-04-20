@@ -13,6 +13,7 @@ router.get(
   authMiddleware,
   waitlistController.searchWaitItem
 );
+router.delete("/waitlist", waitlistController.deleteWaitItem);
 
 router.post(
   "/registration",

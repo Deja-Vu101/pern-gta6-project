@@ -38,6 +38,15 @@ class WaitlistService {
 
     return res.data;
   }
+
+  async deleteItem(id: number) {
+    const reqBody = {
+      id: id,
+    };
+    return axios.delete(`${URL}/waitlist`, {
+      data: reqBody,
+    });
+  }
 }
 
 export default new WaitlistService();

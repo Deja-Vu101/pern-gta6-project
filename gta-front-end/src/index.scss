@@ -87,3 +87,15 @@ body {
     @apply cursor-not-allowed;
   }
 }
+
+.success {
+  background-color: #8bc34a;
+}
+
+.warning {
+  background-color: #ffe082;
+}
+
+.failed {
+  background-color: #ef5350;
+}

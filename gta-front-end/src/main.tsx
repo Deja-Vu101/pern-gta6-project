@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import WaitList from "./waitlist/WaitList.tsx";
 import { Login } from "./auth-pages/login/Login.tsx";
 import Register from "./auth-pages/register/Register.tsx";
+import { NotificationProvider } from "./notification/NotificationContext.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,12 +21,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/waitlist" element={<WaitList />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
+        <NotificationProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/waitlist" element={<WaitList />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </NotificationProvider>
       </QueryClientProvider>
     </React.StrictMode>
   </BrowserRouter>

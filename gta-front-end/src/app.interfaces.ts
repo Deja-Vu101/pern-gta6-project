@@ -1,5 +1,5 @@
 export interface IWaitListItem {
-  id: string;
+  id: number;
   name: string;
   email: string;
   queue: number;
@@ -38,3 +38,4 @@ export interface IAuthForm {
   password: string;
   repeated?: string;
 }
+

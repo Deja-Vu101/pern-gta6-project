@@ -4,8 +4,14 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "../hooks";
 import ErrorOutput from "../error/ErrorOutput";
 import { Triangle } from "react-loader-spinner";
-import { useSearchWaitItems, useWaitlist } from "../hooks/useWaitlist";
+import {
+  useDeleteItem,
+  useSearchWaitItems,
+  useWaitlist,
+} from "../hooks/useWaitlist";
 import { ProfileButton } from "../profile/ProfileButton";
+import { MdDelete } from "react-icons/md";
+import { FaUserEdit } from "react-icons/fa";
 
 const WaitList = () => {
   const [searchedWaitItems, setSearchedWaitItems] = useState<IWaitListItem[]>(
@@ -19,9 +25,17 @@ const WaitList = () => {
     setSearchErrorMessage: setSearchErrorMessage,
   });
 
-  const { data, error } = useWaitlist();
+  const { data } = useWaitlist();
 
   const debounce = useDebounce(inputValue, 1000);
+
+  const dataForTable =
+    inputValue !== "" && searchedWaitItems ? searchedWaitItems : data;
+
+  const { mutate: deleteWaitItem } = useDeleteItem();
+  const deleteItem = (id: number) => {
+    deleteWaitItem(id);
+  };
 
   useEffect(() => {
     setSearchErrorMessage("");
@@ -29,10 +43,6 @@ const WaitList = () => {
       mutate(inputValue);
     }
   }, [debounce]);
-
-  const dataForTable =
-    inputValue !== "" && searchedWaitItems ? searchedWaitItems : data;
-
   return (
     <main className={style.Waitlist}>
       <div className={style.table_name}>
@@ -68,7 +78,15 @@ const WaitList = () => {
               {!searchErrorMessage &&
                 dataForTable.map((item: IWaitListItem) => (
                   <tr key={item.id}>
-                    <td>1</td>
+                    <td className={style.admin_cell}>
+                      <div>
+                        <span onClick={() => deleteItem(item.id)}>
+                          <MdDelete />
+                        </span>
+
+                        <FaUserEdit />
+                      </div>
+                    </td>
                     <td>{item.email}</td>
                     <td>{item.name}</td>
                     <td className={style.queue_cell}>{item.queue}</td>
