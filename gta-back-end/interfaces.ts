@@ -14,13 +14,20 @@ export interface IToken {
 }
 
 export interface IValidateToken {
-  email: string
-  id: string
-  isActivated: boolean
-  iat: number
-  exp: number
+  email: string;
+  id: string;
+  isActivated: boolean;
+  iat: number;
+  exp: number;
 }
 
 export interface AuthRequest extends Request {
   user?: any;
+}
+
+export interface IWaitItem {
+  id: number;
+  name: string;
+  email: string;
+  queue: number;
 }

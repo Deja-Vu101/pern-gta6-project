@@ -15,4 +15,7 @@ export class ApiError extends Error {
   static BadRequest(message: string, errors: any[] = []): ApiError {
     return new ApiError(400, message, errors);
   }
+  static NotModified(message: string, errors: any[] = []): ApiError {
+    return new ApiError(403, message, errors);
+  }
 }

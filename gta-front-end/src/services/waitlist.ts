@@ -34,7 +34,7 @@ class WaitlistService {
   }
 
   async fetchSearchWaitItem(searchTerm: string) {
-    const res = await axios.get(`${URL}/waitlist/${searchTerm}`);
+    const res = await $api.get(`${URL}/waitlist/${searchTerm}`);
 
     return res.data;
   }
@@ -43,9 +43,35 @@ class WaitlistService {
     const reqBody = {
       id: id,
     };
-    return axios.delete(`${URL}/waitlist`, {
+    return $api.delete(`${URL}/waitlist`, {
       data: reqBody,
     });
+  }
+
+  mergeObjects(
+    itemWithUpdatedField: any,
+    existingItem: IWaitListItem
+  ): IWaitListItem {
+    const updatedObject = { ...existingItem };
+
+    if (itemWithUpdatedField.hasOwnProperty("email")) {
+      updatedObject.email = itemWithUpdatedField.email;
+    }
+    if (itemWithUpdatedField.hasOwnProperty("name")) {
+      updatedObject.name = itemWithUpdatedField.name;
+    }
+    if (itemWithUpdatedField.hasOwnProperty("queue")) {
+      updatedObject.queue = itemWithUpdatedField.queue;
+    }
+
+    return updatedObject;
+  }
+  findObjectById(array: IWaitListItem[], id: string | number | false) {
+    return array.find((item) => item.id === id);
+  }
+
+  async updateWaitItem(newObject: IWaitListItem) {
+    return await $api.put(`${URL}/waitlist`, newObject);
   }
 }
 

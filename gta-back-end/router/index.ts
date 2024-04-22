@@ -13,7 +13,15 @@ router.get(
   authMiddleware,
   waitlistController.searchWaitItem
 );
-router.delete("/waitlist", waitlistController.deleteWaitItem);
+router.delete("/waitlist", authMiddleware, waitlistController.deleteWaitItem);
+router.put(
+  "/waitlist",
+  authMiddleware,
+  body("email").isEmail(),
+  body("name").isLength({ min: 6, max: 20 }),
+  body("queue").isInt({ gt: 0 }),
+  waitlistController.editWaitItem
+);
 
 router.post(
   "/registration",

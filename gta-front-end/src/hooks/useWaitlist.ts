@@ -54,3 +54,28 @@ export const useDeleteItem = () => {
     },
   });
 };
+
+export const useUpdateItem = () => {
+  const queryClient = useQueryClient();
+  const { showNotification } = useNotification();
+
+  return useMutation({
+    mutationKey: ["updateItem"],
+    mutationFn: async (newObject: IWaitListItem) =>
+      await waitlist.updateWaitItem(newObject),
+    onSuccess(data) {
+      showNotification(data.data.message, "success");
+
+      queryClient.invalidateQueries({ queryKey: ["waitlist"] });
+    },
+    onError(error: AxiosError) {
+      const errorResponse = error.response?.data as { message: string };
+      const errorMessage = errorResponse?.message;
+      if (error.response?.status === 403) {
+        showNotification(errorMessage, "warning");
+      } else {
+        showNotification(errorMessage, "failed");
+      }
+    },
+  });
+};

@@ -12,9 +12,9 @@
     max-height: 78vh;
     border-bottom: 2px solid var(--border-color);
 
-    div {
-      @apply text-center text-xl font-semibold;
-    }
+    //buttons {
+    //  @apply text-center text-xl font-semibold;
+    //}
   }
 
   .disable {
@@ -30,9 +30,11 @@
 
   table {
     @apply table-auto w-full;
+    table-layout: fixed; //
 
     tr th {
       @apply px-4 py-2;
+      white-space: nowrap; //
     }
     tbody {
       @apply border-2 border-[var(--border-color)] border-b-0;
@@ -42,7 +44,12 @@
       }
       tr td {
         @apply border px-4 py-2;
+        text-overflow: ellipsis;
+        white-space: nowrap; //
       }
+    }
+    .queue_cell {
+      width: 95px;
     }
   }
 
@@ -68,11 +75,12 @@
   }
 }
 
-.admin_cell {
+.admin {
   @apply w-[100px];
-
-  div {
-    @apply flex justify-around;
+}
+.admin_cell {
+  .admin_buttons {
+    @apply flex justify-around text-center text-xl font-semibold;
 
     @media screen and (max-width: 760px) {
       @apply justify-center gap-3;
@@ -82,4 +90,43 @@
       @apply cursor-pointer;
     }
   }
+}
+
+.Wait_Input {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  width: 100%;
+  box-sizing: border-box;
+ 
+}
+.ErrorMessage_Container {
+  position: relative;
+  padding-left: 4px;
+}
+.ErrorMessage {
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px;
+  background-color: red;
+  color: white;
+  font-size: 14px !important;
+  border-radius: 5px;
+  width: fit-content;
+}
+
+.ErrorMessage::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: red transparent transparent;
 }

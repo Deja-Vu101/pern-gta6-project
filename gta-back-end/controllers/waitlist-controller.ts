@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 import waitlistService from "../services/waitlist-service";
+import { validationResult } from "express-validator";
+import { ApiError } from "../exceptions/api-error";
 
 const prisma = new PrismaClient();
 
@@ -92,6 +94,26 @@ class WaitList {
 
       res.status(200).json({
         message: `Wait item with email - "${deletedItem.email}" and name - "${deletedItem.name}" was successfully deleted`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async editWaitItem(req: Request, res: Response, next: NextFunction) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest("Validation error", errors.array()));
+      }
+
+      const { id, email, name, queue } = req.body;
+      const newWaitItem = Object.assign({}, { id, email, name, queue });
+
+      const updatedItem = await waitlistService.updateWaitItem(newWaitItem);
+
+      res.status(200).json({
+        message: `Wait item with email - "${updatedItem.email}" and name - "${updatedItem.name}" was successfully update`,
       });
     } catch (error) {
       next(error);
