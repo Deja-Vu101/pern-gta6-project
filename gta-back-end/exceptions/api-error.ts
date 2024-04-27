@@ -9,8 +9,8 @@ export class ApiError extends Error {
     this.errors = errors;
   }
 
-  static Unauthorized() {
-    return new ApiError(401, "User is not authorized");
+  static Unauthorized(message = "User is not authorized") {
+    return new ApiError(401, message);
   }
   static BadRequest(message: string, errors: any[] = []): ApiError {
     return new ApiError(400, message, errors);

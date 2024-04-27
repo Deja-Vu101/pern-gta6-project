@@ -6,11 +6,12 @@ import UserDto from "../dto/user-dto";
 import emailService from "./email-service";
 import { ApiError } from "../exceptions/api-error";
 import userController from "../controllers/user-controller";
+import { IUser } from "../interfaces";
 
 const prisma = new PrismaClient();
 
 class UserService {
-  async registration(email: string, password: string) {
+  async registration(email: string, password: string, role: string = "USER") {
     const newUser = await prisma.user.findFirst({
       where: { email: email },
     });
@@ -21,11 +22,21 @@ class UserService {
     const hashPassword = await bcrypt.hash(password, 10);
     const activationLink = uuidv4();
 
+    const roleName = await prisma.roles.findFirst({
+      where: {
+        name: role,
+      },
+    });
+
+    if (!roleName)
+      throw ApiError.BadRequest("A problem with issuing a role for a user");
+
     const user = await prisma.user.create({
       data: {
         email: email,
         password: hashPassword,
         activationLink: activationLink,
+        roleName: [roleName.name],
       },
     });
 

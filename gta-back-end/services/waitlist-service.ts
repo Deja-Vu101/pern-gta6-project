@@ -40,15 +40,21 @@ class WaitlistService {
   }
 
   async findMaxQueue() {
-    const foundItem = await prisma.waitList.findMany({
+    const foundItems = await prisma.waitList.findMany({
       select: {
         queue: true,
       },
     });
+    const filteredItems = foundItems.filter(
+      (item) => typeof item.queue === "number"
+    );
 
-    const minQueue = Math.max(...foundItem.map((i) => i.queue));
+    if (filteredItems.length === 0) {
+      return null;
+    }
+    const maxQueue = Math.max(...filteredItems.map((item) => item.queue));
 
-    return minQueue;
+    return maxQueue;
   }
 
   async updateWaitItem(newObject: IWaitItem) {

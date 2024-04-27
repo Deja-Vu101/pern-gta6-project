@@ -25,10 +25,12 @@ model WaitList {
 model User {
   id             String  @id @default(uuid())
   email          String  @unique
-  password       String 
+  password       String
   isActivated    Boolean @default(false)
   activationLink String
   Token          Token[]
+  roleName       String[] 
+  role           Roles[]
 
   @@map("users")
 }
@@ -40,4 +42,12 @@ model Token {
   refreshToken String
 
   @@map("token")
+}
+
+model Roles {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  user User[]
+
+  @@map("roles")
 }

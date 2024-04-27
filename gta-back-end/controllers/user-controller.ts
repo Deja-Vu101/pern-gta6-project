@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import userService from "../services/user-service";
 import emailService from "../services/email-service";
-import { cookie, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 import { ApiError } from "../exceptions/api-error";
 
 class UserController {

@@ -3,6 +3,7 @@ import waitlistController from "../controllers/waitlist-controller";
 import userController from "../controllers/user-controller";
 import { body } from "express-validator";
 import authMiddleware from "../middlewares/auth-middleware";
+import roleMiddleware from "../middlewares/role-middleware";
 
 const router = Router();
 
@@ -13,10 +14,14 @@ router.get(
   authMiddleware,
   waitlistController.searchWaitItem
 );
-router.delete("/waitlist", authMiddleware, waitlistController.deleteWaitItem);
+router.delete(
+  "/waitlist",
+  roleMiddleware(["ADMIN"]),
+  waitlistController.deleteWaitItem
+);
 router.put(
   "/waitlist",
-  authMiddleware,
+  roleMiddleware(["ADMIN"]),
   body("email").isEmail(),
   body("name").isLength({ min: 6, max: 20 }),
   body("queue").isInt({ gt: 0 }),

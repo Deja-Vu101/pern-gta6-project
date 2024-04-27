@@ -31,10 +31,12 @@ class TokenService {
         const userData: IValidateToken = {
           email: decodedToken.email,
           id: decodedToken.id,
+          roleNames: decodedToken.roleName,
           isActivated: decodedToken.isActivated,
           iat: decodedToken.iat as number,
           exp: decodedToken.exp as number,
         };
+
         return userData;
       }
     } catch (error) {
@@ -54,6 +56,7 @@ class TokenService {
       const userData: IValidateToken = {
         email: decodedToken.email,
         id: decodedToken.id,
+        roleNames: decodedToken.roleNames,
         isActivated: decodedToken.isActivated,
         iat: decodedToken.iat as number,
         exp: decodedToken.exp as number,

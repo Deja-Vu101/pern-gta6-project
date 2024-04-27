@@ -8,10 +8,13 @@ const prisma = new PrismaClient();
 
 class WaitList {
   async addWaitItem(req: Request, res: Response) {
-    const { email, name } = req.body;
-    if (!email || !name)
-      return res.status(400).json({ message: "Email and name must be filled" });
     try {
+      const { email, name } = req.body;
+      if (!email || !name)
+        return res
+          .status(400)
+          .json({ message: "Email and name must be filled" });
+
       // Find the smallest number in the queue cell, due to the element can be deleted
       const maxQueue = await waitlistService.findMaxQueue();
 
@@ -19,7 +22,7 @@ class WaitList {
         data: {
           email,
           name,
-          queue: maxQueue + 1,
+          queue: maxQueue ? maxQueue + 1 : 1,
         },
       });
 
