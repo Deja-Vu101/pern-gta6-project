@@ -1,5 +1,5 @@
 .Profile {
-  @apply absolute top-0 right-0 mr-10 mt-5;
+  @apply absolute top-0 right-0 mr-10 mt-5 z-[999];
 
   .profile_wrapper {
     @apply bg-orange-500 w-12 h-12 rounded-full flex justify-center items-center;

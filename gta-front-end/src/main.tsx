@@ -8,6 +8,8 @@ import WaitList from "./waitlist/WaitList.tsx";
 import { Login } from "./auth-pages/login/Login.tsx";
 import Register from "./auth-pages/register/Register.tsx";
 import { NotificationProvider } from "./notification/NotificationContext.tsx";
+import { MusicPlayer } from "./MusicPlayer/MusicPlayer.tsx";
+import { MusicProvider } from "./MusicPlayer/MusicProvider.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,17 +21,21 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <NotificationProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/waitlist" element={<WaitList />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </NotificationProvider>
-      </QueryClientProvider>
-    </React.StrictMode>
+    <MusicProvider>
+      <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+          <NotificationProvider>
+            <MusicPlayer />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/waitlist" element={<WaitList />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </NotificationProvider>
+        </QueryClientProvider>
+        {/*<MusicPlayer />*/}
+      </React.StrictMode>
+    </MusicProvider>
   </BrowserRouter>
 );

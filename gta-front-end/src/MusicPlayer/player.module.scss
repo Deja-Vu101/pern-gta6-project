@@ -1,0 +1,106 @@
+.music_player_wrapper {
+  @apply relative;
+}
+
+.toggle_player_button {
+  @apply absolute top-[-10px] right-[50px] text-white border-none py-[10px] px-[20px] cursor-pointer border-r-[5px] z-[900];
+}
+.music_player_popup {
+  @apply absolute top-[50px] right-[20px] pt-[0] pr-[20px] pb-[20px] pl-[20px] rounded-xl z-[999];
+  background-color: RGB(91, 85, 84, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+  @media screen and (max-width: 600px) {
+    background-color: RGB(91, 85, 84, 0.3);
+  }
+  @media screen and (max-width: 280px) {
+    right: 0;
+    left: 0;
+    transform: translateX(50%);
+  }
+}
+
+.animate_popup {
+  animation: showPopup 1s ease forwards;
+}
+.hidden_popup {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: hidePopup 1s ease forwards;
+}
+.player_controls {
+  @apply flex flex-col gap-2;
+}
+.player_controls section {
+  @apply flex gap-2;
+  svg {
+    @apply text-xl;
+  }
+}
+
+.info_text {
+  @apply text-center;
+}
+
+.player_controls button {
+  @apply w-max border-none py-[10px] px-[20px] cursor-pointer rounded-md;
+  margin: 0 auto;
+}
+.player_controls button:hover {
+  @apply shadow shadow-white bg-white/20;
+}
+.player_controls input[type="range"] {
+  width: 100%;
+}
+
+.player_controls input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.player_controls input[type="range"]::-webkit-slider-thumb:hover {
+  background-color: #ddd;
+}
+
+.poster_song {
+  margin: 0 auto;
+  max-width: 200px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+@keyframes showPopup {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes hidePopup {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.hide_player {
+  @apply flex items-center justify-center gap-[10px] mb-[5px] cursor-pointer;
+  border-radius: 0 0 20px 20px;
+}
+.hide_player:hover {
+  @apply shadow shadow-white bg-white/20;
+}
+button span {
+  @apply shadow shadow-white bg-white/20 flex items-center gap-2 px-4;
+  border-radius: 0 0 20px 20px;
+}

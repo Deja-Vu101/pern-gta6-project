@@ -1,6 +1,6 @@
-import successMP3 from "../../notification-sounds/success.mp3";
-import failedMP3 from "../../notification-sounds/failed.mp3";
-import warningMP3 from "../../notification-sounds/warning.mp3";
+import successMP3 from "../../sounds/notification/success.mp3";
+import failedMP3 from "../../sounds/notification/failed.mp3";
+import warningMP3 from "../../sounds/notification/warning.mp3";
 
 export const PlayNotification = (type: "success" | "warning" | "failed") => {
   let audioType;
@@ -21,5 +21,6 @@ export const PlayNotification = (type: "success" | "warning" | "failed") => {
   }
 
   const audioElement = new Audio(audioType);
+  audioElement.volume = 0.1
   return audioElement.play();
 };

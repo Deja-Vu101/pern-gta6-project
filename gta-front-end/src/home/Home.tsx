@@ -6,6 +6,7 @@ import { IWaitListAddItem, IWaitListItem } from "../app.interfaces";
 import { useState } from "react";
 import ErrorOutput from "../error/ErrorOutput";
 import SuccessMessage from "../successMessage/SuccessMessage";
+import { MusicPlayer } from "../MusicPlayer/MusicPlayer";
 
 interface IFormState {
   email: string;
