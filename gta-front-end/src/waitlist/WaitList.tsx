@@ -15,6 +15,8 @@ import { MdDelete } from "react-icons/md";
 import { FaUserEdit, FaUserCheck } from "react-icons/fa";
 import { TableInput } from "./TableInput";
 import waitlist from "../services/waitlist";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import TableHead from "./TableHead";
 
 const WaitList = () => {
   const [searchedWaitItems, setSearchedWaitItems] = useState<IWaitListItem[]>(
@@ -24,12 +26,23 @@ const WaitList = () => {
   const [inputValue, setInputValue] = useState("");
   const [editMode, setEditMode] = useState<IWaitListItem[]>([]);
 
+  const [filterSetting, setFilterSetting] = useState({
+    column: "queue",
+    orderBy: "asc",
+  });
+
+  const [sortedColumn, setSortedColumn] = useState(filterSetting.column);
+  const [sortOrderBy, setSortOrderBy] = useState(filterSetting.orderBy);
+
   const { mutate, isError, isPending } = useSearchWaitItems({
     onSuccess: setSearchedWaitItems,
     setSearchErrorMessage: setSearchErrorMessage,
   });
 
-  const { data } = useWaitlist();
+  const { data, refetch } = useWaitlist(
+    filterSetting.column,
+    filterSetting.orderBy
+  );
 
   const debounce = useDebounce(inputValue, 1000);
 
@@ -56,7 +69,6 @@ const WaitList = () => {
       setEditMode((prev) => [...prev, itemData]);
     } else {
       const newObject = waitlist.findObjectById(editMode, id);
-      console.log(newObject, "SERVER!!!!");
 
       if (newObject) updateItem(newObject);
       setEditMode((prev) => prev.filter((item: any) => item.id !== id));
@@ -100,12 +112,45 @@ const WaitList = () => {
     }
   };
 
+  const getSortingIcon = (column: string, isHovered: boolean) => {
+    if (isHovered) {
+      return <FaArrowDown />;
+    }
+
+    if (sortedColumn === column) {
+      return sortOrderBy === "asc" ? <FaArrowDown /> : <FaArrowUp />;
+    }
+    return null;
+  };
+
+  const onClickTableHead = (column: string) => {
+    const sortBy = sortOrderBy === "asc" ? "desc" : "asc";
+    if (column === filterSetting.column) {
+      setSortOrderBy(sortBy);
+      setFilterSetting({ column: column, orderBy: sortBy });
+    } else {
+      setSortedColumn(column);
+      setSortOrderBy("asc");
+      setFilterSetting({ column: column, orderBy: "asc" });
+    }
+  };
+
   useEffect(() => {
     setSearchErrorMessage("");
     if (inputValue !== "") {
-      mutate(inputValue);
+      mutate({
+        inputValue,
+        column: filterSetting.column,
+        orderBy: filterSetting.orderBy,
+      });
     }
-  }, [debounce]);
+  }, [debounce, filterSetting.column, filterSetting.orderBy]);
+
+  useEffect(() => {
+    if (inputValue === "") {
+      refetch();
+    }
+  }, [filterSetting.column, filterSetting.orderBy]);
 
   return (
     <main className={style.Waitlist}>
@@ -130,14 +175,10 @@ const WaitList = () => {
       >
         {dataForTable && (
           <table>
-            <thead className={style.stickyHeader}>
-              <tr>
-                <th className={style.admin}></th>
-                <th>Email</th>
-                <th>Name</th>
-                <th className={style.queue_cell}>Queue</th>
-              </tr>
-            </thead>
+            <TableHead
+              getSortingIcon={getSortingIcon}
+              onClickTableHead={onClickTableHead}
+            />
             <tbody>
               {!searchErrorMessage &&
                 dataForTable.map((item: IWaitListItem) => (

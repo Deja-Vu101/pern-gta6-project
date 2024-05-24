@@ -9,16 +9,19 @@ import { $api } from "../http";
 const URL = "http://localhost:5000/api";
 
 class WaitlistService {
-  async fetchWaitList() {
+  async fetchWaitList(param: { column: string; orderBy: string }) {
     try {
-      const res = await $api.get(`${URL}/waitlist`);
-
+      const res = await $api.get(`${URL}/waitlist`, {
+        params: {
+          column: param.column,
+          orderBy: param.orderBy,
+        },
+      });
       return res.data;
     } catch (error) {
       const axiosError = error as AxiosError<
         IApiResponse<{ message: string; arrays: any[] }>
       >;
-
       if (axiosError.response?.status === 401) {
         window.location.href = "/login";
       }
@@ -33,8 +36,17 @@ class WaitlistService {
     return res.data;
   }
 
-  async fetchSearchWaitItem(searchTerm: string) {
-    const res = await $api.get(`${URL}/waitlist/${searchTerm}`);
+  async fetchSearchWaitItem(
+    searchTerm: string,
+    column: string,
+    orderBy: string
+  ) {
+    const res = await $api.get(`${URL}/waitlist/${searchTerm}`, {
+      params: {
+        column: column,
+        orderBy: orderBy,
+      },
+    });
 
     return res.data;
   }

@@ -38,9 +38,12 @@ class WaitList {
 
   async fetchWaitList(req: Request, res: Response, next: NextFunction) {
     try {
+      const { column = "queue", orderBy = "asc" } = req.query;
+      const columnStr = column as string;
+
       const waitlist = await prisma.waitList.findMany({
         orderBy: {
-          queue: "asc",
+          [columnStr]: orderBy,
         },
       });
 
@@ -52,7 +55,8 @@ class WaitList {
 
   async searchWaitItem(req: Request, res: Response) {
     const { searchTerm } = req.params;
-
+    const { column = "queue", orderBy = "asc" } = req.query;
+    const columnStr = column as string;
     try {
       const searchedItems = await prisma.waitList.findMany({
         where: {
@@ -76,6 +80,7 @@ class WaitList {
             },
           ],
         },
+        orderBy: { [columnStr]: orderBy },
       });
 
       if (searchedItems.length === 0)

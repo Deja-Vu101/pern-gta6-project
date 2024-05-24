@@ -39,3 +39,7 @@ export interface IAuthForm {
   repeated?: string;
 }
 
+export interface IFilterObject {
+  column: "queue" | "email" | "name";
+  orderBy: "asc" | "desc";
+}

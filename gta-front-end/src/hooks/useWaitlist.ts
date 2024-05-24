@@ -5,21 +5,32 @@ import { AxiosError } from "axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNotification } from "../notification/NotificationContext";
 
-export const useWaitlist = () => {
+export const useWaitlist = (column: string, orderBy: string) => {
   return useQuery({
     queryKey: ["waitlist"],
-    queryFn: waitlist.fetchWaitList,
+    queryFn: () => waitlist.fetchWaitList({ column, orderBy }),
   });
 };
-
+interface SearchParams {
+  inputValue: string;
+  column: string;
+  orderBy: string;
+}
 export const useSearchWaitItems = ({
   onSuccess,
   setSearchErrorMessage,
 }: IUseSearchWaitItems) => {
-  return useMutation({
+  return useMutation<IWaitListItem[], AxiosError, SearchParams>({
     mutationKey: ["search waitlist item"],
-    mutationFn: (inputValue: string) =>
-      waitlist.fetchSearchWaitItem(inputValue),
+    mutationFn: ({
+      inputValue,
+      column,
+      orderBy,
+    }: {
+      inputValue: string;
+      column: string;
+      orderBy: string;
+    }) => waitlist.fetchSearchWaitItem(inputValue, column, orderBy),
     onSuccess: (searchedItems: IWaitListItem[]) => {
       setSearchErrorMessage("");
       onSuccess(searchedItems);

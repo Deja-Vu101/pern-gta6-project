@@ -32,6 +32,11 @@
     @apply table-auto w-full;
     table-layout: fixed; //
 
+    th:not(.admin):hover {
+      @apply cursor-pointer;
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
     tr th {
       @apply px-4 py-2;
       white-space: nowrap; //
@@ -50,6 +55,9 @@
     }
     .queue_cell {
       width: 95px;
+    }
+    .tableHead_container {
+      @apply flex gap-1 items-center justify-center;
     }
   }
 
