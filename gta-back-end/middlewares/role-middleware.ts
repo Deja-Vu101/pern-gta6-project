@@ -18,7 +18,7 @@ export default function roleMiddleware(roles: string[]) {
       if (!userData || userData === undefined || userData === null)
         return next(ApiError.Unauthorized());
 
-      const hasMatchRoleRequests = userData.roleNames.some((role: string) =>
+      const hasMatchRoleRequests = userData.roleName.some((role: string) =>
         roles.includes(role)
       );
 

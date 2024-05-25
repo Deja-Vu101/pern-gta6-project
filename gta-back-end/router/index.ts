@@ -44,5 +44,6 @@ router.post("/logout", userController.logout);
 
 router.get("/activate/:link", userController.activateEmail);
 router.get("/refresh", userController.refresh);
+router.get("/user", userController.isLoginedUser)
 
 export default router;

@@ -21,7 +21,7 @@ export const useSearchWaitItems = ({
   setSearchErrorMessage,
 }: IUseSearchWaitItems) => {
   return useMutation<IWaitListItem[], AxiosError, SearchParams>({
-    mutationKey: ["search waitlist item"],
+    mutationKey: ["searched"],
     mutationFn: ({
       inputValue,
       column,

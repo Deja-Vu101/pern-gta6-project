@@ -70,6 +70,7 @@ class UserService {
       throw ApiError.BadRequest("Your password is incorrect");
 
     const userDto = new UserDto(existUser);
+
     const tokens = tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
 

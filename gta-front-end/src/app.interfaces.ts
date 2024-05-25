@@ -25,6 +25,7 @@ export interface IUser {
   email: string;
   isActivated: boolean;
   id: string;
+  roleName: string[];
 }
 
 export interface IAuthResponse {
@@ -42,4 +43,8 @@ export interface IAuthForm {
 export interface IFilterObject {
   column: "queue" | "email" | "name";
   orderBy: "asc" | "desc";
+}
+
+export interface ILoginedUser extends IUser {
+  roleName: string[];
 }

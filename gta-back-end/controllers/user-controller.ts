@@ -3,6 +3,8 @@ import userService from "../services/user-service";
 import emailService from "../services/email-service";
 import { validationResult } from "express-validator";
 import { ApiError } from "../exceptions/api-error";
+import tokenService from "../services/token-service";
+import UserDto from "../dto/user-dto";
 
 class UserController {
   async registration(req: Request, res: Response, next: NextFunction) {
@@ -88,6 +90,20 @@ class UserController {
         httpOnly: true,
       });
       res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async isLoginedUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { refreshToken } = req.cookies;
+
+      const user = await tokenService.validateRefreshToken(refreshToken);
+      if (user) {
+        const userDto = new UserDto(user);
+        res.json(userDto).status(200);
+      }
     } catch (error) {
       next(error);
     }

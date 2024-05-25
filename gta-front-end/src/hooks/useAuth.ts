@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { IAuthForm } from "../app.interfaces";
+import { IAuthForm, IAuthResponse, ILoginedUser } from "../app.interfaces";
 import auth from "../services/auth";
 import { AxiosError } from "axios";
 
@@ -18,6 +18,7 @@ export const useLogin = ({ setErrorMessage }: IUseLogin) => {
     },
     onSuccess(data) {
       localStorage.setItem("accessToken", data.accessToken);
+      addAuthDataInSessionStorage(data.user);
       navigate("/waitlist");
     },
     onError: (error: AxiosError) => {
@@ -39,6 +40,7 @@ export const useRegister = ({ setErrorMessage }: IUseLogin) => {
     },
     onSuccess(data) {
       localStorage.setItem("accessToken", data.accessToken);
+      addAuthDataInSessionStorage(data.user);
       navigate("/waitlist");
     },
     onError: (error: AxiosError) => {
@@ -47,4 +49,21 @@ export const useRegister = ({ setErrorMessage }: IUseLogin) => {
       setErrorMessage(errorMessage);
     },
   });
+};
+
+export const useUser = () => {
+  return useMutation({
+    mutationKey: ["fetch_user"],
+    mutationFn: async () => {
+      const res = await auth.fetchUser();
+      return res.data;
+    },
+  });
+};
+
+export const addAuthDataInSessionStorage = (data: ILoginedUser) => {
+  const { email, id, isActivated } = data;
+  sessionStorage.setItem("auth-email", email);
+  sessionStorage.setItem("auth-id", id);
+  sessionStorage.setItem("auth-isActivated", isActivated.toString());
 };

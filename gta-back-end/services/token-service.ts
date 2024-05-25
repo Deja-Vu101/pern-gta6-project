@@ -31,7 +31,7 @@ class TokenService {
         const userData: IValidateToken = {
           email: decodedToken.email,
           id: decodedToken.id,
-          roleNames: decodedToken.roleName,
+          roleName: decodedToken.roleName,
           isActivated: decodedToken.isActivated,
           iat: decodedToken.iat as number,
           exp: decodedToken.exp as number,
@@ -56,7 +56,7 @@ class TokenService {
       const userData: IValidateToken = {
         email: decodedToken.email,
         id: decodedToken.id,
-        roleNames: decodedToken.roleNames,
+        roleName: decodedToken.roleName,
         isActivated: decodedToken.isActivated,
         iat: decodedToken.iat as number,
         exp: decodedToken.exp as number,

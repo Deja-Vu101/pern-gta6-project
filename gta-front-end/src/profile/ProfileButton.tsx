@@ -2,13 +2,39 @@ import { useEffect, useRef, useState } from "react";
 import profile from "./profile.module.scss";
 import auth from "../services/auth";
 import { useNavigate } from "react-router-dom";
+import { addAuthDataInSessionStorage, useUser } from "../hooks/useAuth";
 
 export const ProfileButton = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
-  const email = "kozachkov@next.com";
+
+  const { mutate: fetchUser } = useUser();
+  const [user, setUser] = useState({
+    email: sessionStorage.getItem("auth-email"),
+    id: sessionStorage.getItem("auth-id"),
+    isActivated: sessionStorage.getItem("auth-isActivated") === "true",
+    roleName: [] as string[],
+  });
+
+  useEffect(() => {
+    if (!user.email) {
+      console.log(user);
+      fetchUser(undefined, {
+        onSuccess(data) {
+          setUser({
+            email: data.email,
+            id: data.id,
+            isActivated: data.isActivated,
+            roleName: data.roleName,
+          });
+
+          addAuthDataInSessionStorage(data)
+        },
+      });
+    }
+  }, []);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -44,7 +70,7 @@ export const ProfileButton = () => {
         className={profile.profile_wrapper}
         onClick={toggleDropdown}
       >
-        <div>{email.charAt(0).toUpperCase()}</div>
+        <div>{user.email && user.email.charAt(0).toUpperCase()}</div>
       </div>
 
       {isDropdownOpen && (

@@ -21,8 +21,7 @@ export interface IValidateToken {
   isActivated: boolean;
   iat: number;
   exp: number;
-  roleNames: any;
-  //roleNames: string[];
+  roleName: string[];
 }
 
 export interface AuthRequest extends Request {

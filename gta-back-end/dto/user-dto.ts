@@ -1,4 +1,4 @@
-import { IUser } from "../interfaces";
+import { IUser, IValidateToken } from "../interfaces";
 
 export default class UserDto {
   email: string;
@@ -6,7 +6,7 @@ export default class UserDto {
   isActivated: boolean;
   roleName: string[];
 
-  constructor(model: IUser) {
+  constructor(model: IUser | IValidateToken) {
     this.email = model.email;
     this.id = model.id;
     this.isActivated = model.isActivated;

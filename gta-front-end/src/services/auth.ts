@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { $api } from "../http";
-import { IAuthResponse } from "../app.interfaces";
+import { IAuthResponse, ILoginedUser } from "../app.interfaces";
 
 class AuthServices {
   async login(
@@ -24,6 +24,10 @@ class AuthServices {
   }
   async logout(): Promise<void> {
     return $api.post("/logout");
+  }
+
+  async fetchUser(): Promise<AxiosResponse<ILoginedUser>> {
+    return $api.get("/user");
   }
 }
 
