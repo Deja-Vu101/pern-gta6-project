@@ -21,11 +21,10 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <MusicProvider>
-      <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <MusicProvider>
           <NotificationProvider>
-            <MusicPlayer />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/waitlist" element={<WaitList />} />
@@ -33,9 +32,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/register" element={<Register />} />
             </Routes>
           </NotificationProvider>
-        </QueryClientProvider>
-        {/*<MusicPlayer />*/}
-      </React.StrictMode>
-    </MusicProvider>
+        </MusicProvider>
+      </QueryClientProvider>
+    </React.StrictMode>
   </BrowserRouter>
 );

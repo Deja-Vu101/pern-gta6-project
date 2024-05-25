@@ -17,11 +17,13 @@ import { TableInput } from "./TableInput";
 import waitlist from "../services/waitlist";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import TableHead from "./TableHead";
+import { MusicPlayer } from "../MusicPlayer/MusicPlayer";
 
 const WaitList = () => {
   const [searchedWaitItems, setSearchedWaitItems] = useState<IWaitListItem[]>(
     []
   );
+
   const [searchErrorMessage, setSearchErrorMessage] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
   const [editMode, setEditMode] = useState<IWaitListItem[]>([]);
@@ -56,7 +58,12 @@ const WaitList = () => {
 
   const { mutate: updateItem } = useUpdateItem();
 
-  const editItem = (id: number, name: string, email: string, queue: number) => {
+  const editItem = async (
+    id: number,
+    name: string,
+    email: string,
+    queue: number
+  ) => {
     const itemData = {
       id: id,
       name: name,
@@ -70,7 +77,20 @@ const WaitList = () => {
     } else {
       const newObject = waitlist.findObjectById(editMode, id);
 
-      if (newObject) updateItem(newObject);
+      if (newObject) {
+        updateItem(newObject, {
+          onSuccess: () => {
+            if (inputValue !== "") {
+              mutate({
+                inputValue,
+                column: filterSetting.column,
+                orderBy: filterSetting.orderBy,
+              });
+            }
+          },
+        });
+      }
+
       setEditMode((prev) => prev.filter((item: any) => item.id !== id));
     }
   };
@@ -136,21 +156,22 @@ const WaitList = () => {
   };
 
   useEffect(() => {
-    setSearchErrorMessage("");
-    if (inputValue !== "") {
-      mutate({
-        inputValue,
-        column: filterSetting.column,
-        orderBy: filterSetting.orderBy,
-      });
-    }
+    const fetchData = () => {
+      if (inputValue === "") {
+        refetch();
+      } else {
+        setSearchErrorMessage("");
+        if (inputValue !== "") {
+          mutate({
+            inputValue,
+            column: filterSetting.column,
+            orderBy: filterSetting.orderBy,
+          });
+        }
+      }
+    };
+    fetchData();
   }, [debounce, filterSetting.column, filterSetting.orderBy]);
-
-  useEffect(() => {
-    if (inputValue === "") {
-      refetch();
-    }
-  }, [filterSetting.column, filterSetting.orderBy]);
 
   return (
     <main className={style.Waitlist}>
@@ -278,6 +299,8 @@ const WaitList = () => {
       </div>
 
       <ProfileButton />
+
+      <MusicPlayer />
     </main>
   );
 };

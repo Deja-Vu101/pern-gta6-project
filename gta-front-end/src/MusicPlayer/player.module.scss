@@ -1,13 +1,13 @@
 .music_player_wrapper {
-  @apply relative;
+  @apply absolute top-0 left-0 w-full z-[1];
 }
 
 .toggle_player_button {
-  @apply absolute top-[-10px] right-[50px] text-white border-none py-[10px] px-[20px] cursor-pointer border-r-[5px] z-[900];
+  @apply absolute top-[-10px] left-[50px] text-white border-none py-[10px] px-[20px] cursor-pointer border-r-[5px];
 }
 .music_player_popup {
-  @apply absolute top-[50px] right-[20px] pt-[0] pr-[20px] pb-[20px] pl-[20px] rounded-xl z-[999];
-  background-color: RGB(91, 85, 84, 0.2);
+  @apply absolute top-[50px] left-[20px] pt-[0] pr-[20px] pb-[20px] pl-[20px] rounded-xl;
+  background-color: RGB(91, 85, 84, 0.4);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 
   @media screen and (max-width: 600px) {
