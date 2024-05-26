@@ -26,7 +26,7 @@ class WaitList {
         },
       });
 
-      res.json(createdRow);
+      res.json(createdRow).status(201);
     } catch (error: any) {
       if (error.code === "P2002") {
         res.status(400).send({ message: "Email already exists" });
